@@ -53,11 +53,27 @@ const LOG_STYLES = {
     }
 } as const;
 
-// Error color for all error logs
-const ERROR_COLOR = '#F44336';  // Red
+const ERROR_COLOR = '#F44336';
+const DEV_LOG_KEY = 'ynt-devLog';
+
+// Initialize localStorage from storage on startup
+browser.storage.local.get('settings').then((data: any) => {
+    const enabled = data?.settings?.devLog === true;
+    localStorage.setItem(DEV_LOG_KEY, enabled ? 'true' : 'false');
+}).catch(() => {
+    localStorage.setItem(DEV_LOG_KEY, 'false');
+});
+
+// Keep localStorage in sync when setting changes from popup
+browser.storage.onChanged.addListener((changes: any) => {
+    if (changes.settings?.newValue?.devLog !== undefined) {
+        localStorage.setItem(DEV_LOG_KEY, changes.settings.newValue.devLog ? 'true' : 'false');
+    }
+});
 
 function createLogger(category: { context: string; color: string }) {
     return (message: string, ...args: any[]) => {
+        if (localStorage.getItem(DEV_LOG_KEY) !== 'true') return;
         console.log(
             `%c${LOG_PREFIX}${category.context} ${message}`,
             `color: ${category.color}`,
@@ -66,13 +82,13 @@ function createLogger(category: { context: string; color: string }) {
     };
 }
 
-// Create error logger function
 function createErrorLogger(category: { context: string; color: string }) {
     return (message: string, ...args: any[]) => {
+        if (localStorage.getItem(DEV_LOG_KEY) !== 'true') return;
         console.log(
             `%c${LOG_PREFIX}${category.context} %c${message}`,
-            `color: ${category.color}`,  // Keep category color for prefix
-            `color: ${ERROR_COLOR}`,     // Red color for error message
+            `color: ${category.color}`,
+            `color: ${ERROR_COLOR}`,
             ...args
         );
     };

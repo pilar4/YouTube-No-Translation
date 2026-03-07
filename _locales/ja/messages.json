@@ -94,6 +94,13 @@
     "message": "無料のAPIキーをここで取得",
     "description": "Link text for getting API key"
   },
+  "popup_extraSettings_devLog": {
+    "message": "Dev Log"
+  },
+  "popup_extraSettings_devLog_tooltip": {
+    "message": "Enable console logs for debugging.",
+    "description": "Tooltip for dev log setting"
+  },
 
   "popup_clearCache": {
     "message": "キャッシュをクリア",

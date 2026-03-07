@@ -94,6 +94,13 @@
     "message": "Obtenez votre clé API gratuite ici",
     "description": "Link text for getting API key"
   },
+  "popup_extraSettings_devLog": {
+    "message": "Dev Log"
+  },
+  "popup_extraSettings_devLog_tooltip": {
+    "message": "Activer les logs de la console pour le debugging.",
+    "description": "Tooltip for dev log"
+  },
   
   "popup_clearCache": {
     "message": "Vider le cache",

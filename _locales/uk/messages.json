@@ -95,6 +95,13 @@
     "description": "Link text for getting API key"
   },
   
+  "popup_extraSettings_devLog": {
+    "message": "Dev Log"
+  },
+  "popup_extraSettings_devLog_tooltip": {
+    "message": "Enable console logs for debugging."
+  },
+  
   "popup_clearCache": {
     "message": "Очистити кеш",
     "description": "Button text for clearing cache"

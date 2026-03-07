@@ -57,6 +57,7 @@ export interface ExtensionSettings {
         installationDate: string;
         lastPromptDate: string;
     };
+    devLog: boolean;
 }
 
 export interface YouTubePlayerResponse {

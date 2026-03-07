@@ -34,7 +34,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
         enabled: true,
         installationDate: new Date().toISOString(),
         lastPromptDate: ''
-    }
+    },
+    devLog: false
 };
 
 // Define the type for installation details

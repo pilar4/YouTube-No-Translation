@@ -28,6 +28,7 @@ const asrToggleContainer = document.getElementById('asrToggleContainer') as HTML
 const youtubeDataApiToggle = document.getElementById('youtubeDataApiEnabled') as HTMLInputElement;
 const youtubeDataApiKeyInput = document.getElementById('youtubeDataApiKey') as HTMLInputElement;
 const youtubeApiKeyContainer = document.getElementById('youtubeApiKeyContainer') as HTMLDivElement;
+const devLogToggle = document.getElementById('devLogEnabled') as HTMLInputElement;
 const clearCacheBtn = document.getElementById('clearCacheBtn') as HTMLButtonElement;
 
 // Extra settings collapsible section - only exists in popup
@@ -112,6 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         asrSubtitlesToggle.checked = settings.subtitlesTranslation.asrEnabled;
         youtubeDataApiToggle.checked = settings.youtubeDataApi.enabled;
         youtubeDataApiKeyInput.value = settings.youtubeDataApi.apiKey;
+        if (devLogToggle) devLogToggle.checked = settings.devLog ?? false;
         
         // Update ASR toggle visibility based on current settings
         updateAsrToggleVisibility();
@@ -301,6 +303,17 @@ youtubeDataApiToggle.addEventListener('change', () =>
         }
     })
 );
+
+// Handle Dev Log toggle change
+if (devLogToggle) {
+    devLogToggle.addEventListener('change', () =>
+        handleToggleChange({
+            element: devLogToggle,
+            storageKey: 'devLog',
+            messageFeature: 'devLog'
+        })
+    );
+}
 
 // Handle subtitles language selection changes
 subtitlesLanguageSelect.addEventListener('change', async () => {

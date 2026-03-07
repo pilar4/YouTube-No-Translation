@@ -39,7 +39,12 @@
     const LOG_PREFIX = '[YNT][DescriptionGuard]';
     const LOG_COLOR = '#FF9800'; // Orange
 
+    function isDevLogEnabled() {
+        return localStorage.getItem('ynt-devLog') === 'true';
+    }
+
     function guardLog(message, ...args) {
+        if (!isDevLogEnabled()) return;
         // Keep logging very light to avoid spam
         console.log(`%c${LOG_PREFIX} ${message}`, `color: ${LOG_COLOR}`, ...args);
     }

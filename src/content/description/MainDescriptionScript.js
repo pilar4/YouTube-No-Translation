@@ -21,7 +21,12 @@
     const LOG_COLOR = '#2196F3'; // Blue
     const ERROR_COLOR = '#F44336';  // Red
 
+    function isDevLogEnabled() {
+        return localStorage.getItem('ynt-devLog') === 'true';
+    }
+
     function log(message, ...args) {
+        if (!isDevLogEnabled()) return;
         console.log(
             `%c${LOG_PREFIX}${LOG_CONTEXT} ${message}`,
             `color: ${LOG_COLOR}`,
@@ -30,6 +35,7 @@
     }
 
     function errorLog(message, ...args) {
+        if (!isDevLogEnabled()) return;
         console.log(
             `%c${LOG_PREFIX}${LOG_CONTEXT} %c${message}`,
             `color: ${LOG_COLOR}`,
