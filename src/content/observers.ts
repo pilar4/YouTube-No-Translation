@@ -751,6 +751,12 @@ let urlChangeDebounceTimer: number | null = null;
 const URL_CHANGE_DEBOUNCE_MS = 250;
 
 export function setupUrlObserver() {
+    // Prevent initializing observers in irrelevant iframes (live chat, background auth pages, etc.)
+    if (window !== window.top && !window.location.pathname.startsWith('/embed')) {
+        coreLog(`[URL] Ignored observer setup for iframe: ${window.location.href}`);
+        return;
+    }
+
     coreLog('Setting up URL observer');
 
     // --- Standard History API monitoring
@@ -809,7 +815,7 @@ export function setupUrlObserver() {
 }
 
 function observersCleanup() {
-    coreLog('Cleaning up all observers');
+    coreLog('Cleaning up all previous observers');
     
     cleanupMainVideoObserver()
 

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Url changes are now ignored in irrelevant iframes (such as live chat and background authentication pages), preventing unnecessary URL change detections and observer cleanup.
+
 ## [2.21.2] - 2026-03-09
 
 ### Added
