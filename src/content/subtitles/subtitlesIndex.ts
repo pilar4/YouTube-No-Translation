@@ -11,27 +11,34 @@ import { subtitlesLog, coreLog } from '../../utils/logger';
 import { ExtensionSettings } from '../../types/types';
 
 
-async function syncSubtitlesLanguagePreference() {
+async function syncSubtitlesLanguagePreference(): Promise<boolean> {
     try {
         const result = await browser.storage.local.get('settings');
         const settings = result.settings as ExtensionSettings;
-        
-        if (settings?.subtitlesTranslation?.language) {
-            localStorage.setItem('ynt-subtitlesLanguage', settings.subtitlesTranslation.language);
-            // Sync ASR enabled setting
-            const asrEnabled = settings.subtitlesTranslation.asrEnabled || false;
-            localStorage.setItem('ynt-subtitlesAsrEnabled', asrEnabled.toString());
-            //subtitlesLog(`Synced subtitle language preference from extension storage: ${settings.subtitlesTranslation.language}`);
+
+        if (!settings?.subtitlesTranslation?.enabled) {
+            return false;
         }
+        
+        if (settings.subtitlesTranslation.language) {
+            localStorage.setItem('ynt-subtitlesLanguage', settings.subtitlesTranslation.language);
+        }
+        const asrEnabled = settings.subtitlesTranslation.asrEnabled || false;
+        localStorage.setItem('ynt-subtitlesAsrEnabled', asrEnabled.toString());
+
+        return true;
     } catch (error) {
         subtitlesLog('Error syncing subtitle language preference:', error);
+        return false;
     }
 }
 
-// Call this function during initialization
-export async function handleSubtitlesTranslation() {   
-    //subtitlesLog('Initializing subtitles translation prevention');
-    await syncSubtitlesLanguagePreference(); // Sync language preference
+export async function handleSubtitlesTranslation() {
+    const isEnabled = await syncSubtitlesLanguagePreference();
+    if (!isEnabled) {
+        return;
+    }
+
     const script = document.createElement('script');
     script.src = browser.runtime.getURL('dist/content/scripts/subtitlesScript.js');
     document.documentElement.appendChild(script);
