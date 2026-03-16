@@ -12,16 +12,23 @@ import { audioLog, audioErrorLog } from '../../utils/logger';
 import { isMobileSite } from '../../utils/navigation';
 
 
-async function syncAudioLanguagePreference() {
+// Update: returns a boolean indicating if audio translation is enabled
+async function syncAudioLanguagePreference(): Promise<boolean> {
     try {
         const result = await browser.storage.local.get('settings');
         const settings = result.settings as ExtensionSettings;
         
+        if (!settings?.audioTranslation?.enabled) {
+            return false;
+        }
+
         if (settings?.audioTranslation?.language) {
             localStorage.setItem('ynt-audioLanguage', settings.audioTranslation.language);
         }
+        return true;
     } catch (error) {
         audioErrorLog('Error syncing audio language preference:', error);
+        return false;
     }
 }
 
@@ -30,7 +37,12 @@ export async function handleAudioTranslation() {
         //audioLog('Mobile site detected, skipping audio translation script injection.');
         return;
     }
-    await syncAudioLanguagePreference();
+    
+    const isEnabled = await syncAudioLanguagePreference();
+    if (!isEnabled) {
+        return;
+    }
+
     const script = document.createElement('script');
     script.src = browser.runtime.getURL('dist/content/scripts/audioScript.js');
     document.documentElement.appendChild(script);
